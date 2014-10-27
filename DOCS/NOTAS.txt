@@ -1,0 +1,101 @@
+NOTAS IMPORTANTES !!
+
+Asegurese de tener conocimientos de los siguientes temas:
+
+- Administración de Linux.
+- Virtualización en Linux con kvm/qemu/libvirt.
+- LinuxBridge y OpenVSwitch.
+- Linux NameSpaces.
+- Redes en general.
+- OpenStack.
+- NFS, GlusterFS.
+- Instalación "correcta" de Debian 7.
+
+Este instalador es SOLAMENTE para DEBIAN 7 de 64 bits (x86_64 / amd64). No intente usarlo en otro ambiente.
+
+1.- Repositorios:
+
+Asegurese de tener los repositorios de debian y de openstack para debian bien configurados. Los de OpenStack se agregan así:
+
+a.- Agregue las siguientes líneas a /etc/apt/sources.list:
+
+deb http://archive.gplhost.com/debian juni main
+deb http://archive.gplhost.com/debian juno-backports main
+
+b.- Importe la llave del repositorio
+
+cd /tmp
+wget http://archive.gplhost.com/debian/repository_key.asc
+apt-key add repository_key.asc
+
+cd /
+
+apt-get update
+
+
+Debe tener las ramas "main contrib non-free" activas en los repositorios principales y de updates.
+
+Ejemplo de un sources.list bien configurado para debian 7
+
+
+==============================================================================
+==============================================================================
+deb http://ftp.us.debian.org/debian/ wheezy main contrib non-free
+deb-src http://ftp.us.debian.org/debian/ wheezy main contrib non-free
+
+deb http://security.debian.org/ wheezy/updates main contrib non-free
+deb-src http://security.debian.org/ wheezy/updates main contrib non-free
+
+# wheezy-updates, previously known as 'volatile'
+deb http://ftp.us.debian.org/debian/ wheezy-updates main contrib non-free
+deb-src http://ftp.us.debian.org/debian/ wheezy-updates main contrib non-free
+
+# Repositorios para OpenStack
+deb http://archive.gplhost.com/debian juno main
+deb http://archive.gplhost.com/debian juno-backports main
+==============================================================================
+==============================================================================
+
+
+2.- System Control (/etc/sysctl.conf).
+
+ALERTA: Esto es SUMAMENTE importante !. Asegúrese de tener los siguientes items configurados en el archivo /etc/sysctl.conf:
+
+net.ipv4.ip_forward=1
+net.ipv4.conf.all.rp_filter=0
+net.ipv4.conf.default.rp_filter=0
+
+Si no los tiene configurados, colóquelos/cambielos y luego reinice la máquina !!
+
+
+3.- OpenVSWITCH:
+
+Instale primero openvswitch. Ejecute los comandos a continuación (luego de colocar los repositorios indicados anteriormente):
+
+apt-get -y install build-essential module-assistant
+apt-get -y install linux-headers-`uname -r`
+apt-get -y remove --purge bridge-utils
+
+apt-get -y install openvswitch-datapath-source
+
+module-assistant auto-install openvswitch-datapath
+
+apt-get -y install openvswitch-brcompat openvswitch-common openvswitch-controller python-openvswitch openvswitch-test openvswitch-switch openvswitch-datapath-dkms
+
+
+/etc/init.d/openvswitch-switch restart
+
+Luego configure su switch:
+
+Primer paso: br-int (switch de integración de OpenStack):
+
+ovs-vsctl add-br br-int
+
+Siguiente paso: br-ethX (switch para las redes de OpenStack). Ejempo para "eth2":
+
+ovs-vsctl add-br br-eth2
+ovs-vsctl add-port br-eth2 eth2
+
+NOTA: Trate siempre de usar una interfaz que esté LIBRE y pueda ser "dedicada" para OpenStack. Para otras configuraciones, consulte la información que está disponible en Internet. No es necesario colocar las interfaces asociadas a los switches en /etc/network/interfaces, a menos que las tenga "compartidas" y no dedicadas para OpenStack.
+
+

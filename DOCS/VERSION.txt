@@ -1,0 +1,5 @@
+Version del instalador:
+
+1.0.0.deb7 "Snow Lynx"
+
+SOLO PARA OPENSTACK JUNO !!!

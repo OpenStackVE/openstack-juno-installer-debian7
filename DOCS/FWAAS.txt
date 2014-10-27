@@ -1,0 +1,6 @@
+ALERTA !!
+
+Existe un bug que previene la correcta ejecución del servicio
+neutron-l3 si se activa el servicio fwaas. El BUG proviene de
+los paquetes de debian en gplhost. Cuando el bug se corriga,
+procederemos a reactivar fwaas en el instalador

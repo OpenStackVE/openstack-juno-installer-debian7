@@ -1,0 +1,9 @@
+1.0.0.deb7 26-Octubre-2014
+- Cambios generales para adaptar el instalador original
+  para Icehouse en la nueva versión (Juno).
+- Se agrega el módulo para Sahara (port desde el instalador
+  de juno-centos7).
+- Todos los módulos probados y operativos a excepción del
+  componente FWAAS que tiene un BUG en los paquetes del
+  repositorio gplhost.
+
