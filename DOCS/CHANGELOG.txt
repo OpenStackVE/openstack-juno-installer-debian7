@@ -1,3 +1,7 @@
+1.0.1.deb7 29-Octubre-2014
+- Mejoras en secuencia de instalación de mongodb para el
+  módulo de ceilometer.
+
 1.0.0.deb7 26-Octubre-2014
 - Cambios generales para adaptar el instalador original
   para Icehouse en la nueva versión (Juno).

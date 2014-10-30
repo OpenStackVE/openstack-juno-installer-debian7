@@ -70,13 +70,26 @@ then
 	aptitude -y install mongodb mongodb-clients mongodb-dev mongodb-server
 	aptitude -y install libsnappy1 libgoogle-perftools4
 
-        # sed -i "s/127.0.0.1/$mondbhost/g" /etc/mongodb.conf
-        sed -i "s/27017/$mondbport/g" /etc/mongodb.conf
-	echo "smallfiles = true" >> /etc/mongodb.conf
-	echo "port = $mondbport" >> /etc/mongodb.conf
 
-	/etc/init.d/mongodb restart
+        sed -i "s/127.0.0.1/$mondbhost/g" /etc/mongodb.conf
+        sed -r -i "s/\#port\ =\ 27017/port\ =\ $mondbport/g" /etc/mongodb.conf
+        echo "smallfiles = true" >> /etc/mongodb.conf
+
+        /etc/init.d/mongodb stop
+        /etc/init.d/mongodb stop
+        killall -9 -u mongodb
+        rm -f /var/lib/mongodb/journal/prealloc.*
+        sleep 2
+        sync
+        sleep 2
+	/etc/init.d/mongodb start
+        sleep 2
+        /etc/init.d/mongodb restart
+        sleep 2
+        /etc/init.d/mongodb status
 	chkconfig mongodb on
+        sync
+        sleep 2
 
 	mongo --host 127.0.0.1 --eval "db = db.getSiblingDB(\"$mondbname\");db.addUser({user: \"$mondbuser\",pwd: \"$mondbpass\",roles: [ \"readWrite\", \"dbAdmin\" ]})"
 
