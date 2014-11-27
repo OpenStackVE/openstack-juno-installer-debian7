@@ -1,3 +1,10 @@
+1.0.2.deb7 26-Noviembre-2014
+- Se incluye la opción de seleccionar el tipo
+  de proveedor de token para Keystone (pki o
+  uuid).
+- Corrección menor en módulo de instalación de
+  keystone.
+
 1.0.1.deb7 29-Octubre-2014
 - Mejoras en secuencia de instalación de mongodb para el
   módulo de ceilometer.
