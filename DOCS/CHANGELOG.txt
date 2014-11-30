@@ -1,3 +1,9 @@
+1.0.3.deb7 29-Noviembre-2014
+- Pinning de libreria "libnetcf1=0.1.9-2" por paquetes rotos
+  en gplhost (libvirtd específicamente).
+- Mejoras en secuencia de instalación de MongoDB para
+  ceilometer.
+
 1.0.2.deb7 26-Noviembre-2014
 - Se incluye la opción de seleccionar el tipo
   de proveedor de token para Keystone (pki o

@@ -64,35 +64,11 @@ echo ""
 
 if [ $ceilometer_in_compute_node = "no" ]
 then
-
 	echo "Instalando y configurando backend de base de datos MongoDB"
 	echo ""
 	aptitude -y install mongodb mongodb-clients mongodb-dev mongodb-server
 	aptitude -y install libsnappy1 libgoogle-perftools4
-
-
-        sed -i "s/127.0.0.1/$mondbhost/g" /etc/mongodb.conf
-        sed -r -i "s/\#port\ =\ 27017/port\ =\ $mondbport/g" /etc/mongodb.conf
-        echo "smallfiles = true" >> /etc/mongodb.conf
-
-        /etc/init.d/mongodb stop
-        /etc/init.d/mongodb stop
-        killall -9 -u mongodb
-        rm -f /var/lib/mongodb/journal/prealloc.*
-        sleep 2
-        sync
-        sleep 2
-	/etc/init.d/mongodb start
-        sleep 2
-        /etc/init.d/mongodb restart
-        sleep 2
-        /etc/init.d/mongodb status
-	chkconfig mongodb on
-        sync
-        sleep 2
-
-	mongo --host 127.0.0.1 --eval "db = db.getSiblingDB(\"$mondbname\");db.addUser({user: \"$mondbuser\",pwd: \"$mondbpass\",roles: [ \"readWrite\", \"dbAdmin\" ]})"
-
+	/etc/init.d/mongodb restart
 fi
 
 echo "ceilometer-api ceilometer/register-endpoint boolean false" > /tmp/ceilometer-seed.txt
@@ -117,7 +93,6 @@ if [ $ceilometer_in_compute_node == "no" ]
 then
         echo ""
         echo "Paquetes para Controller o ALL-IN-ONE"
-        echo ""
 
 	aptitude -y install ceilometer-agent-central ceilometer-agent-compute ceilometer-api \
 		ceilometer-collector ceilometer-common python-ceilometer python-ceilometerclient \
@@ -156,6 +131,36 @@ then
 	fi
 else
 	/etc/init.d/ceilometer-agent-compute stop
+fi
+
+if [ $ceilometer_in_compute_node = "no" ]
+then
+	echo ""
+	echo "Re-configurando backend de base de datos MongoDB"
+	echo ""
+
+	sed -i "s/127.0.0.1/$mondbhost/g" /etc/mongodb.conf
+	sed -r -i "s/\#port\ =\ 27017/port\ =\ $mondbport/g" /etc/mongodb.conf
+	echo "smallfiles = true" >> /etc/mongodb.conf
+
+	/etc/init.d/mongodb stop
+	/etc/init.d/mongodb stop
+	killall -9 -u mongodb
+	rm -f /var/lib/mongodb/journal/prealloc.*
+	sleep 2
+	sync
+	sleep 2
+	/etc/init.d/mongodb start
+	sleep 2
+	/etc/init.d/mongodb restart
+	sleep 2
+	/etc/init.d/mongodb status
+	chkconfig mongodb on
+	sync
+	sleep 2
+
+	mongo --host $mondbhost --eval "db = db.getSiblingDB(\"$mondbname\");db.addUser({user: \"$mondbuser\",pwd: \"$mondbpass\",roles: [ \"readWrite\", \"dbAdmin\" ]})"
+
 fi
 
 source $keystone_admin_rc_file
