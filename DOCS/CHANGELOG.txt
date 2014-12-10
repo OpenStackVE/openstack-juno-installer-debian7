@@ -1,3 +1,7 @@
+1.0.4.deb7 09-Diciembre-2014
+- Se corrige un BUG en la configuración del parámetro
+  "cpu_mode" en el módulo de instalación de Nova.
+
 1.0.3.deb7 29-Noviembre-2014
 - Pinning de libreria "libnetcf1=0.1.9-2" por paquetes rotos
   en gplhost (libvirtd específicamente).
