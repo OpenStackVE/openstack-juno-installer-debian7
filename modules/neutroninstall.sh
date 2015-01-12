@@ -451,7 +451,6 @@ case $dbflavor in
 esac
  
 openstack-config --set /etc/neutron/neutron.conf database retry_interval 10
-openstack-config --set /etc/neutron/neutron.conf database idle_timeout 3600
 
 
 #
@@ -479,6 +478,20 @@ case $dbflavor in
         openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database connection postgresql://$neutrondbuser:$neutrondbpass@$dbbackendhost:$psqldbport/$neutrondbname
         ;;
 esac
+
+openstack-config --set /etc/neutron/neutron.conf database retry_interval 10
+openstack-config --set /etc/neutron/neutron.conf database idle_timeout 3600
+openstack-config --set /etc/neutron/neutron.conf database min_pool_size 1
+openstack-config --set /etc/neutron/neutron.conf database max_pool_size 10
+openstack-config --set /etc/neutron/neutron.conf database max_retries 100
+openstack-config --set /etc/neutron/neutron.conf database pool_timeout 10
+
+openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database retry_interval 10
+openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database idle_timeout 3600
+openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database min_pool_size 1
+openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database max_pool_size 10
+openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database max_retries 100
+openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini database pool_timeout 10
 
 sync
 sleep 2

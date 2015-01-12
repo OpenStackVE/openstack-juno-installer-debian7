@@ -342,7 +342,7 @@ else
 	/etc/init.d/ceilometer-agent-compute restart
 fi
 
-testceilometer=`dpkg -l ceilometer-api 2>/dev/null|tail -n 1|grep -ci ^ii`
+testceilometer=`dpkg -l ceilometer-common 2>/dev/null|tail -n 1|grep -ci ^ii`
 if [ $testceilometer == "0" ]
 then
 	echo ""

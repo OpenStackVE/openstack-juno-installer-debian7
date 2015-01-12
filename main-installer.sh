@@ -15,7 +15,7 @@
 #
 # Script principal
 # Versión 1.0.4.deb7 "Shadow Cat"
-# 09 de Diciembre del 2014
+# 11 de Enero del 2015
 #
 
 PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -46,7 +46,7 @@ case $1 in
 	echo "INSTALADOR DE OPENSTACK JUNO PARA DEBIAN 7"
 	echo "Realizado por Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Versión 1.0.4.deb7 \"Shadow Cat\" - Diciembre 09, 2014"
+	echo "Versión 1.0.5.deb7 \"Shadow Cat\" - Enero 11, 2015"
 	echo ""
 	echo "Se verificaran los prerequisitos"
 	echo "Si alguno de los prerequisitos falla, se informará y se detendrá el proceso"
