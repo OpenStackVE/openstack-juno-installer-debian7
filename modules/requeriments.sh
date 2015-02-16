@@ -203,17 +203,26 @@ else
 	/etc/init.d/libvirtd stop
 	/etc/init.d/libvirtd force-stop
 	rm -f /var/run/libvirtd.pid
-	# Y ademas hay que congelar la version de libnetcf1 por problemas con libvirt
-	# Si esto no se hace en debian7, libvirt no arranca (no al menos con icehouse)
-	apt-get --force-yes -y install libnetcf1=0.1.9-2
-	echo "Package: libnetcf1" > /etc/apt/preferences.d/libnetcf1
-	echo "Pin: version *" >> /etc/apt/preferences.d/libnetcf1
-	echo "Pin-priority: -1" >> /etc/apt/preferences.d/libnetcf1
+	# Para el 16-Feb-2015, este paso ya no pareciera ser necesario
+	# apt-get --force-yes -y install libnetcf1=0.1.9-2
+	# echo "Package: libnetcf1" > /etc/apt/preferences.d/libnetcf1
+	# echo "Pin: version *" >> /etc/apt/preferences.d/libnetcf1
+	# echo "Pin-priority: -1" >> /etc/apt/preferences.d/libnetcf1
 	/etc/init.d/libvirtd start
 	aptitude -y install dnsmasq dnsmasq-utils
 	/etc/init.d/dnsmasq stop
 	chkconfig dnsmasq off
 	sed -r -i 's/ENABLED\=1/ENABLED\=0/' /etc/default/dnsmasq
+
+	sed -i.ori 's/#listen_tls = 0/listen_tls = 0/g' /etc/libvirt/libvirtd.conf
+	sed -i 's/#listen_tcp = 1/listen_tcp = 1/g' /etc/libvirt/libvirtd.conf
+	sed -i 's/#auth_tcp = "sasl"/auth_tcp = "none"/g' /etc/libvirt/libvirtd.conf
+	sed -i.ori 's/#libvirtd_opts=""/libvirtd_opts="-l"/g' /etc/default/libvirtd
+
+	/etc/init.d/libvirtd restart
+	iptables -A INPUT -p tcp -m multiport --dports 16509 -j ACCEPT
+	/etc/init.d/iptables-persistent save
+
 fi
 
 cp ./libs/ksm.sh /etc/init.d/ksm

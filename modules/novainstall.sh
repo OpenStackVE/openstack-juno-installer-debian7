@@ -137,6 +137,12 @@ echo "neutron-common neutron/enable_tunneling boolean false" >> /tmp/neutron-see
 echo "neutron-common neutron/configure_db boolean false" >> /tmp/neutron-seed.txt
 echo "neutron-common neutron/plugin-select select OpenVSwitch" >> /tmp/neutron-seed.txt
 echo "neutron-common neutron/local_ip string $neutronhost" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/auth-host string $neutronhost" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron/admin-user string $keystoneadminuser" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron/region-name string $endpointsregion" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/admin-password password $keystoneadminuser" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/metadata_secret password $metadata_shared_secret" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/region-name string $endpointsregion" >> /tmp/neutron-seed.txt
 
 debconf-set-selections /tmp/neutron-seed.txt
 
@@ -171,6 +177,7 @@ echo "nova-common nova/rabbit_password password $brokerpass" >> /tmp/nova-seed.t
 echo "nova-common nova/rabbit_userid string $brokeruser" >> /tmp/nova-seed.txt
 echo "nova-common nova/neutron_url string http://$neutronhost:9696" >> /tmp/nova-seed.txt
 echo "nova-common nova/neutron_admin_password password $neutronpass" >> /tmp/nova-seed.txt
+echo "nova-common nova/metadata_secret password $metadata_shared_secret" >> /tmp/nova-seed.txt
 
 debconf-set-selections /tmp/nova-seed.txt
 

@@ -1,5 +1,5 @@
 Version del instalador:
 
-1.0.6.deb7 "Shadow Cat"
+1.0.7.deb7 "Shadow Cat"
 
 SOLO PARA OPENSTACK JUNO !!!

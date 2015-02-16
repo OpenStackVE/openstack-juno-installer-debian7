@@ -136,6 +136,12 @@ echo "neutron-common neutron/enable_tunneling boolean false" >> /tmp/neutron-see
 echo "neutron-common neutron/configure_db boolean false" >> /tmp/neutron-seed.txt
 echo "neutron-common neutron/plugin-select select ml2" >> /tmp/neutron-seed.txt
 echo "neutron-common neutron/local_ip string $neutron_computehost" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/auth-host string $neutronhost" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron/admin-user string $keystoneadminuser" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron/region-name string $endpointsregion" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/admin-password password $keystoneadminuser" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/metadata_secret password $metadata_shared_secret" >> /tmp/neutron-seed.txt
+echo "neutron-metadata-agent neutron-metadata/region-name string $endpointsregion" >> /tmp/neutron-seed.txt
 
 
 debconf-set-selections /tmp/neutron-seed.txt
